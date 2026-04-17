@@ -37,7 +37,15 @@ class ItemStorage:
         """
         # In production environment we will use migration tool
         # like https://github.com/pressly/goose
-        # YOUR CODE GOES HERE
+        table_creation = """
+	CREATE TABLE items(
+	item_id int PRIMARY KEY,
+	user_id int NOT NULL,
+	title varchar(100) NOT NULL,
+        decription text);
+	"""
+	async with self._pool.acquire() as connect:
+            await connect.execute(table_creation)
 
     async def save_items(self, items: list[ItemEntry]) -> None:
         """
@@ -46,7 +54,9 @@ class ItemStorage:
         """
         # Don't use str-formatting, query args should be escaped to avoid
         # sql injections https://habr.com/ru/articles/148151/.
-        # YOUR CODE GOES HERE
+        insert_into_table = """
+	INSERT INTO items (item_id, user_id, title, description) VALUES (1, 1, "sale", "sale of a product");
+	"""
 
     async def find_similar_items(
         self, user_id: int, title: str, description: str
