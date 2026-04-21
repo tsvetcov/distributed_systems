@@ -44,7 +44,7 @@ class ItemStorage:
 	title varchar(100) NOT NULL,
         decription text);
 	"""
-	async with self._pool.acquire() as connect:
+	async with self._pool.acquire() as cur_create:
             await connect.execute(table_creation)
 
     async def save_items(self, items: list[ItemEntry]) -> None:
@@ -55,8 +55,11 @@ class ItemStorage:
         # Don't use str-formatting, query args should be escaped to avoid
         # sql injections https://habr.com/ru/articles/148151/.
         insert_into_table = """
-	INSERT INTO items (item_id, user_id, title, description) VALUES (1, 1, "sale", "sale of a product");
+	INSERT INTO items (item_id, user_id, title, description) VALUES ($1, $2, $3, $4);
 	"""
+        input = [(enrty.item_id, entry.user_id, entry.title, entry.description) for entry in items]
+	async with self._pool.acquire() as cur_insert:
+            await connect.executemany(insert_into_table, input)
 
     async def find_similar_items(
         self, user_id: int, title: str, description: str
@@ -64,4 +67,11 @@ class ItemStorage:
         """
         Напишите код для поиска записей, имеющих указанные user_id, title и description.
         """
-        # YOUR CODE GOES HERE
+        query = """
+        SELECT *
+        FROM items
+        WHERE items.user_is = user_id AND items.title = title AND items.description = description
+        """
+        input = [(enrty.item_id, entry.user_id, entry.title, entry.description) for entry in items]
+	async with self._pool.acquire() as cur_query:
+            await connect.fetchmany(table_creation, input)
