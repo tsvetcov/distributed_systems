@@ -42,7 +42,7 @@ class ItemStorage:
 	item_id int PRIMARY KEY,
 	user_id int NOT NULL,
 	title varchar(100) NOT NULL,
-        decription text);
+    description text);
 	"""
 	    async with self._pool.acquire() as cur_create:
             await connect.execute(table_creation)
