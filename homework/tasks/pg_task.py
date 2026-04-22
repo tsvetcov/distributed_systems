@@ -77,6 +77,6 @@ class ItemStorage:
             result = await cur_query.fetch(query, *input)
         answer = []
         for cur_row in result:
-			cur_item = ItemEntry(cur_row['item_id'], cur_row['user_id'], cur_row['title'], cur_row['description'])
-			answer.append(cur_item)
+            cur_item = ItemEntry(cur_row['item_id'], cur_row['user_id'], cur_row['title'], cur_row['description'])
+            answer.append(cur_item)
         return answer
