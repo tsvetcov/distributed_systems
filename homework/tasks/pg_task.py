@@ -58,7 +58,7 @@ class ItemStorage:
 	INSERT INTO items (item_id, user_id, title, description) VALUES ($1, $2, $3, $4);
 	"""
         input = [(enrty.item_id, entry.user_id, entry.title, entry.description) for entry in items]
-	    async with self._pool.acquire() as cur_insert:
+        async with self._pool.acquire() as cur_insert:
             await connect.executemany(insert_into_table, input)
 
     async def find_similar_items(
@@ -73,5 +73,5 @@ class ItemStorage:
         WHERE items.user_is = user_id AND items.title = title AND items.description = description
         """
         input = [(enrty.item_id, entry.user_id, entry.title, entry.description) for entry in items]
-	    async with self._pool.acquire() as cur_query:
+        async with self._pool.acquire() as cur_query:
             await connect.fetchmany(table_creation, input)
