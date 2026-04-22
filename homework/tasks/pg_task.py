@@ -75,4 +75,8 @@ class ItemStorage:
         input = (user_id, title, description)
         async with self._pool.acquire() as cur_query:
             result = await cur_query.fetch(query, *input)
-        return result
+        answer = []
+        for cur_row in result:
+			cur_item = ItemEntry(cur_row['item_id'], cur_row['user_id'], cur_row['title'], cur_row['description'])
+			answer.append(cur_item)
+        return answer
