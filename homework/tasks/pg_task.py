@@ -70,7 +70,7 @@ class ItemStorage:
         query = """
         SELECT *
         FROM items
-        WHERE items.user_is = $1 AND items.title = $2 AND items.description = $3
+        WHERE items.user_id = $1 AND items.title = $2 AND items.description = $3
         """
         input = (user_id, title, description)
         async with self._pool.acquire() as cur_query:
