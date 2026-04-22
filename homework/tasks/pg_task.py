@@ -45,7 +45,7 @@ class ItemStorage:
         description text);
 	    """
         async with self._pool.acquire() as cur_create:
-            await connect.execute(table_creation)
+            await cur_create.execute(table_creation)
 
     async def save_items(self, items: list[ItemEntry]) -> None:
         """
@@ -57,9 +57,9 @@ class ItemStorage:
         insert_into_table = """
 	INSERT INTO items (item_id, user_id, title, description) VALUES ($1, $2, $3, $4);
 	"""
-        input = [(enrty.item_id, entry.user_id, entry.title, entry.description) for entry in items]
+        input = [(entry.item_id, entry.user_id, entry.title, entry.description) for entry in items]
         async with self._pool.acquire() as cur_insert:
-            await connect.executemany(insert_into_table, input)
+            await cur_insert.executemany(insert_into_table, input)
 
     async def find_similar_items(
         self, user_id: int, title: str, description: str
@@ -70,8 +70,9 @@ class ItemStorage:
         query = """
         SELECT *
         FROM items
-        WHERE items.user_is = user_id AND items.title = title AND items.description = description
+        WHERE items.user_is = $1 AND items.title = $2 AND items.description = $3
         """
-        input = [(enrty.item_id, entry.user_id, entry.title, entry.description) for entry in items]
+        input = (user_id, title, description)
         async with self._pool.acquire() as cur_query:
-            await connect.fetchmany(table_creation, input)
+            result = await cur_query.fetchmany(query, input)
+		return result
