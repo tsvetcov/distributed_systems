@@ -44,7 +44,7 @@ class ItemStorage:
 	    title varchar(100) NOT NULL,
         description text);
 	    """
-	    async with self._pool.acquire() as cur_create:
+        async with self._pool.acquire() as cur_create:
             await connect.execute(table_creation)
 
     async def save_items(self, items: list[ItemEntry]) -> None:
