@@ -38,12 +38,12 @@ class ItemStorage:
         # In production environment we will use migration tool
         # like https://github.com/pressly/goose
         table_creation = """
-	CREATE TABLE items(
-	item_id int PRIMARY KEY,
-	user_id int NOT NULL,
-	title varchar(100) NOT NULL,
-    description text);
-	"""
+	    CREATE TABLE items(
+	    item_id int PRIMARY KEY,
+	    user_id int NOT NULL,
+	    title varchar(100) NOT NULL,
+        description text);
+	    """
 	    async with self._pool.acquire() as cur_create:
             await connect.execute(table_creation)
 
