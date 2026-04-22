@@ -17,12 +17,12 @@ class UsersByTitleStorage:
         можно было за один запрос получить список уникальных пользователей,
         имеющих объявления с заданным заголовком.
         """
-        aredis.sadd(title, user_id)
+        await self._client.sadd(title, user_id)
 
     async def find_users_by_title(self, title: str) -> list[int]:
         """
         Напишите код для поиска уникальных user_id, имеющих хотя бы одно объявление
         с заданным title.
         """
-        result = aredis.smembers(title)
-        return list(result)
+        result = await self._client.smembers(title)
+        return [int(user_id) for user_id in result]
