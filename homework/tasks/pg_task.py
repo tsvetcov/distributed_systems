@@ -74,5 +74,5 @@ class ItemStorage:
         """
         input = (user_id, title, description)
         async with self._pool.acquire() as cur_query:
-            result = await cur_query.fetch(query, input)
+            result = await cur_query.fetch(query, *input)
         return result
