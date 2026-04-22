@@ -42,7 +42,7 @@ class ItemStorage:
 	    item_id int PRIMARY KEY,
 	    user_id int NOT NULL,
 	    title varchar(100) NOT NULL,
-        description text);
+        description text NOT NULL);
 	    """
         async with self._pool.acquire() as cur_create:
             await cur_create.execute(table_creation)
@@ -74,5 +74,5 @@ class ItemStorage:
         """
         input = (user_id, title, description)
         async with self._pool.acquire() as cur_query:
-            result = await cur_query.fetchmany(query, input)
+            result = await cur_query.fetch(query, input)
         return result
