@@ -25,11 +25,11 @@ async def do_reliable_request(url: str, observer: ResultsObserver, max_timeout=6
                 response = await client.get(url, timeout=max_timeout)
                 response.raise_for_status()
                 data = response.read()
+                observer.observe(data)
             except httpx.TimeoutException:
                 continue
             except httpx.HTTPStatusError:
                 continue
-            observer.observe(data)
             break
         return
         #####################
