@@ -75,4 +75,4 @@ class ItemStorage:
         input = (user_id, title, description)
         async with self._pool.acquire() as cur_query:
             result = await cur_query.fetchmany(query, input)
-		return result
+        return result
